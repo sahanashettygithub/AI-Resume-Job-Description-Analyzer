@@ -1,4 +1,4 @@
-import fitz
+import pymupdf
 
 
 def extract_resume_text(uploaded_file):
