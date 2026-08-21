@@ -66,16 +66,23 @@ Rules:
 
     response = model.generate_content(prompt)
 
-    result = response.text.strip()
+result = response.text.strip()
 
+# Remove Markdown code fences
+if result.startswith("```"):
+    result = result.replace("```json", "")
+    result = result.replace("```", "")
+    result = result.strip()
 
-    # Remove Markdown code fences if Gemini adds them
-    if result.startswith("```"):
+try:
+    return json.loads(result)
 
-        result = result.replace("```json", "")
-        result = result.replace("```", "")
-        result = result.strip()
+except json.JSONDecodeError:
+    # Try to extract the JSON object
+    start = result.find("{")
+    end = result.rfind("}") + 1
 
+    if start != -1 and end != 0:
+        result = result[start:end]
 
-    # Convert JSON string into Python dictionary
     return json.loads(result)
