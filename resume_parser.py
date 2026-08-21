@@ -4,7 +4,7 @@ import pymupdf
 def extract_resume_text(uploaded_file):
     pdf_bytes = uploaded_file.read()
 
-    document = fitz.open(stream=pdf_bytes, filetype="pdf")
+    document = pymupdf.open(stream=pdf_bytes, filetype="pdf")
 
     text = ""
 
