@@ -21,7 +21,12 @@ genai.configure(api_key=GOOGLE_API_KEY)
 
 
 # Gemini model
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel(
+    "gemini-2.5-flash",
+    generation_config={
+        "response_mime_type": "application/json"
+    }
+)
 
 
 def analyze_resume(resume_text, job_description):
@@ -60,29 +65,31 @@ Rules:
 4. Do not invent experience.
 5. Be realistic about the candidate's qualifications.
 6. improvements should be specific and actionable.
-7. Generate 5 interview questions relevant to the job.
-8. Return ONLY JSON.
+7. Generate exactly 5 interview questions relevant to the job.
+8. Return ONLY the JSON object.
 """
 
     response = model.generate_content(prompt)
 
-result = response.text.strip()
+    result = response.text.strip()
 
-# Remove Markdown code fences
-if result.startswith("```"):
-    result = result.replace("```json", "")
-    result = result.replace("```", "")
-    result = result.strip()
+    # Remove Markdown code fences if Gemini adds them
+    if result.startswith("```"):
+        result = result.replace("```json", "")
+        result = result.replace("```", "")
+        result = result.strip()
 
-try:
-    return json.loads(result)
-
-except json.JSONDecodeError:
-    # Try to extract the JSON object
+    # Extract JSON object if there is extra text
     start = result.find("{")
-    end = result.rfind("}") + 1
+    end = result.rfind("}")
 
-    if start != -1 and end != 0:
-        result = result[start:end]
+    if start != -1 and end != -1:
+        result = result[start:end + 1]
 
-    return json.loads(result)
+    try:
+        return json.loads(result)
+
+    except json.JSONDecodeError as e:
+        raise ValueError(
+            f"Gemini returned invalid JSON: {e}"
+        )
