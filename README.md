@@ -29,43 +29,8 @@ The application extracts information from a resume PDF, compares it with the pro
 
 The application follows a simple AI-powered document analysis pipeline:
 
-```text
-                ┌──────────────────┐
-                │   Resume PDF     │
-                └────────┬─────────┘
-                         │
-                         ▼
-                ┌──────────────────┐
-                │ Extract Resume   │
-                │      Text        │
-                └────────┬─────────┘
-                         │
-                         │
-┌──────────────────┐     │
-│  Job Description │─────┤
-└──────────────────┘     │
-                         ▼
-                ┌──────────────────┐
-                │  Gemini LLM      │
-                │    Analysis      │
-                └────────┬─────────┘
-                         │
-                         ▼
-                ┌──────────────────────────┐
-                │ Resume Match Analysis    │
-                ├──────────────────────────┤
-                │ • Match Score            │
-                │ • Matching Skills        │
-                │ • Missing Skills         │
-                │ • Keywords               │
-                │ • Experience Match       │
-                │ • Education Match        │
-                │ • Improvements            │
-                │ • Interview Questions    │
-                └──────────────────────────┘
-```
+<img width="1472" height="1200" alt="image" src="https://github.com/user-attachments/assets/24402a3c-d933-45c3-804d-423787f78290" />
 
----
 
 ## 🛠️ Tech Stack
 
